@@ -13,3 +13,13 @@ canvas {
     display: block;
     margin: 20px auto;
 }
+
+svg{
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    margin:auto;
+    outline: 1px dotted blue;
+    width: 90%;
+    height: 85%;
+}
