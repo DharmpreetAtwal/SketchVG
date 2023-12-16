@@ -44,7 +44,8 @@ class Circle extends Shape {
       drawShape() {
             this.x = draw.startX;
             this.y = draw.startY;
-            this.radius = Math.abs(draw.startX - draw.endX);
+            this.radius = Math.max(Math.abs(draw.startX - draw.endX), 
+                                    Math.abs(draw.startY - draw.endY));
       }
 
       toSVGString() {
