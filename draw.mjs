@@ -28,10 +28,67 @@ class Rect extends Shape {
       }
 
       toSVGString() {
-            return "<rect height='"+ this.height +
+            var diffX = draw.endX - draw.startX;
+            var diffY = draw.endY - draw.startY;
+            var angle = -1 * Math.atan(diffY/diffX);
+
+            if(diffX < 0) {
+                  angle =  angle + Math.PI
+            }
+
+            if(Math.tan(angle) > 0) {
+                  var w = this.width;
+                  var h = this.height; 
+            } else {
+                  var w = this.height;
+                  var h = this.width;
+            }
+
+            if(Math.sin(angle) > 0 && Math.cos(angle) > 0) {
+                  var a = -90;
+            } else if(Math.sin(angle) > 0 && Math.cos(angle) < 0) {
+                  var a = -180;
+            } else if(Math.sin(angle) < 0 && Math.cos(angle) < 0) {
+                  var a = -270;
+            } else if(Math.sin(angle) < 0 && Math.cos(angle) < 0) {
+                  var a = 0;
+            }
+
+            console.log(angle);
+            return "<rect height='"+ w +
+                        "' width ='"+ h + 
+                        "' x='" + this.x + 
+                        "' y='" + this.y  + "'" +
+                        " transform='rotate("+ a + "," + 
+                              draw.startX + "," +
+                              draw.startY +")' />";
+            /*if(diffX < 0 && diffY < 0) {
+                  return "<rect height='"+ this.height +
                   "' width ='"+ this.width + 
                   "' x='" + this.x + 
                   "' y='" + this.y  + "' />";
+            } else if (diffX < 0 && diffY > 0){
+                  return "<rect height='"+ this.width +
+                  "' width ='"+ this.height + 
+                  "' x='" + this.x + 
+                  "' y='" + this.y  + "'" +
+                  " transform='rotate(-90, " + 
+                        draw.startX + "," + draw.startY +")' />";
+            } else if(diffX > 0 && diffY > 0) {
+                  return "<rect height='"+ this.height +
+                  "' width ='"+ this.width + 
+                  "' x='" + this.x + 
+                  "' y='" + this.y  + "'" +
+                  " transform='rotate(-180, " + 
+                        draw.startX + "," + draw.startY +")' />";            
+            } else {
+                  return "<rect height='"+ this.width +
+                  "' width ='"+ this.height + 
+                  "' x='" + this.x + 
+                  "' y='" + this.y  + "'" +
+                  " transform='rotate(-270, " + 
+                        draw.startX + "," + draw.startY +")' />";        
+            }*/
       }
 }
 
