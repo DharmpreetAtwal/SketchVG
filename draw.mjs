@@ -74,11 +74,11 @@ class Line extends Shape {
                   "' y1='" + this.y1 +
                   "' x2='" + this.x2 +
                   "' y2='" + this.y2 + 
-                  "' style='stroke:rgb(0, 0, 255);stroke-width:2' />";
+                  "' style='stroke:rgb(255, 0, 0);stroke-width:2' />";
       }
 }
 
-//import * as Shape from "./shape.js";
+//import * as Shape from "./shape.mjs";
 
 class Draw {
       constructor() {
