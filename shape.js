@@ -1,20 +1,22 @@
-class Shape {
+import { Draw } from "./draw.js";
+
+export class Shape {
       constructor(x, y) {
             this.x =x;
             this.y=y;
             this.color = "#000000";
       }      
   
-      drawShape() {
+      drawShape(draw) {
             throw new Error('NOT IMEPLEMENTED drawShape');
       }
 
-      toSVGString() {
+      toSVGString(draw) {
             throw new Error('NOT IMEPLEMENTED toSVGSTRING');
       }
-  }
+}
   
-class Rect extends Shape {
+export class Rect extends Shape {
       constructor(x, y, h, w) {
             super(x, y);
             this.height = h;
@@ -22,16 +24,16 @@ class Rect extends Shape {
       }
   
       drawShape() {
-            this.width = Math.abs(draw.startX - draw.endX);
-            this.height = Math.abs(draw.startY - draw.endY);
+            this.width = Math.abs( Draw.instance.startX -  Draw.instance.endX);
+            this.height = Math.abs( Draw.instance.startY -  Draw.instance.endY);
             this.color = document.getElementById("colorPicker").value;
-            this.x = draw.startX;
-            this.y = draw.startY;
+            this.x =  Draw.instance.startX;
+            this.y =  Draw.instance.startY;
       }
 
       toSVGString() {
-            var diffX = draw.endX - draw.startX;
-            var diffY = draw.endY - draw.startY;
+            var diffX =  Draw.instance.endX -  Draw.instance.startX;
+            var diffY =  Draw.instance.endY -  Draw.instance.startY;
             var angle = -1 * Math.atan(diffY/diffX);
 
             if(diffX < 0) {
@@ -56,30 +58,29 @@ class Rect extends Shape {
                   var a = 0;
             }
 
-            console.log(angle);
             return "<rect height='"+ w +
                         "' width ='"+ h + 
                         "' x='" + this.x + 
                         "' y='" + this.y  + "'" +
                         " transform='rotate("+ a + "," + 
-                              draw.startX + "," +
-                              draw.startY +")'" + 
+                               Draw.instance.startX + "," +
+                               Draw.instance.startY +")'" + 
                         " style='fill:"+ this.color + ";' />";
       }
 }
 
-class Circle extends Shape {
+export class Circle extends Shape {
       constructor(x, y, r) {
             super(x, y);
             this.radius = r;
       }
 
       drawShape() {
-            this.x = draw.startX;
-            this.y = draw.startY;
+            this.x =  Draw.instance.startX;
+            this.y =  Draw.instance.startY;
             this.color = document.getElementById("colorPicker").value;
-            this.radius = Math.max(Math.abs(draw.startX - draw.endX), 
-                                    Math.abs(draw.startY - draw.endY));
+            this.radius = Math.max(Math.abs( Draw.instance.startX -  Draw.instance.endX), 
+                                    Math.abs( Draw.instance.startY -  Draw.instance.endY));
       }
 
       toSVGString() {
@@ -91,7 +92,7 @@ class Circle extends Shape {
 
 }
 
-class Line extends Shape {
+export class Line extends Shape {
       constructor(x1, y1, x2, y2) {
             super(x1, y1);
             this.x2 = x2;
@@ -99,10 +100,10 @@ class Line extends Shape {
       }
 
       drawShape() {
-            this.x1 = draw.startX;
-            this.y1 = draw.startY;
-            this.x2 = draw.endX;
-            this.y2 = draw.endY;
+            this.x1 =  Draw.instance.startX;
+            this.y1 =  Draw.instance.startY;
+            this.x2 =  Draw.instance.endX;
+            this.y2 =  Draw.instance.endY;
             this.color = document.getElementById("colorPicker").value;
       }
 
@@ -113,74 +114,4 @@ class Line extends Shape {
                   "' y2='" + this.y2 + 
                   "' style='stroke:"+ this.color + ";' />";
             }
-}
-
-//import * as Shape from "./shape.mjs";
-
-class Draw {
-      constructor() {
-            this.savedSVG = "";
-            this.currShape = new Line(0, 0, 0, 0);
-            this.dragging = false;
-            this.startX = 0;
-            this.startY = 0;
-            this.endX= 0;
-            this.endY= 0;
-      }
-
-      setpos(x, y) {
-            this.currShape.x = x;
-            this.currShape.y = y;
-      }
-}
-
-const draw = new Draw();
-const svg = document.getElementById('svg');
-
-document.onmousedown = function(event) {
-      draw.dragging = true;
-      var coord = toSVGCoordinates(event, svg);
-      draw.startX = coord[0];
-      draw.startY = coord[1];
-}
-
-document.onmousemove = function(event) {
-      if(draw.dragging) {
-            var coord = toSVGCoordinates(event, svg);
-            draw.endX = coord[0];
-            draw.endY = coord[1];
-            draw.currShape.drawShape();
-
-            svg.innerHTML = draw.savedSVG + draw.currShape.toSVGString();
-      }
-}
-
-document.onmouseup =  function(event) {
-      draw.dragging = false;
-      draw.savedSVG = svg.innerHTML;
-}
-
-function toSVGCoordinates(event, svg) {
-      var clientX = event.clientX;
-      var clientY = event.clientY;
-
-      var canvasRect = svg.getBoundingClientRect();
-      var canvasX = clientX - canvasRect.left;
-      var canvasY = clientY - canvasRect.top;
-
-      return [canvasX, canvasY];
-};
-
-/// UI
-
-function rectButton() {
-      draw.currShape = new Rect(0, 0, 0, 0);
-}
-
-function ellipseButton() {
-      draw.currShape = new Circle(0, 0, 0);
-}
-
-function lineButton() {
-      draw.currShape = new Line(0, 0, 0, 0);
 }
