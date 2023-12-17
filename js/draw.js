@@ -52,7 +52,7 @@ document.onmousemove = function(event) {
             draw.endY = coord[1];
             draw.currShape.drawShape(draw);
 
-            svg.innerHTML = draw.savedSVG + draw.currShape.toSVGString(draw);
+            svg.innerHTML = draw.savedSVG + draw.currShape.toSVGString();
       }
 }
 
@@ -64,13 +64,14 @@ document.onmouseup =  function(event) {
 // UI
 
 document.getElementById("rectButton").onclick  = function(event) {
-      draw.currShape = new Rect(0, 0, 0, 0);
-}
+      Draw.instance.currShape = new Rect(0, 0, 0, 0);
+  }
+  
+  document.getElementById("ellipseButton").onclick = function(event) {
+      Draw.instance.currShape = new Circle(0, 0, 0)
+  }
+  
+  document.getElementById("lineButton").onclick = function(event) {
+      Draw.instance.currShape = new Line(0, 0, 0, 0);
+  }
 
-document.getElementById("ellipseButton").onclick = function(event) {
-      draw.currShape = new Circle(0, 0, 0)
-}
-
-document.getElementById("lineButton").onclick = function(event) {
-      draw.currShape = new Line(0, 0, 0, 0);
-}

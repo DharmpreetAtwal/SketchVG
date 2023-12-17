@@ -7,11 +7,11 @@ export class Shape {
             this.color = "#000000";
       }      
   
-      drawShape(draw) {
+      drawShape() {
             throw new Error('NOT IMEPLEMENTED drawShape');
       }
 
-      toSVGString(draw) {
+      toSVGString() {
             throw new Error('NOT IMEPLEMENTED toSVGSTRING');
       }
 }
@@ -47,15 +47,16 @@ export class Rect extends Shape {
                   var w = this.height;
                   var h = this.width;
             }
+            let a=0;
 
             if(Math.sin(angle) > 0 && Math.cos(angle) > 0) {
-                  var a = -90;
+                  a = -90;
             } else if(Math.sin(angle) > 0 && Math.cos(angle) < 0) {
-                  var a = -180;
+                  a = -180;
             } else if(Math.sin(angle) < 0 && Math.cos(angle) < 0) {
-                  var a = -270;
+                  a = -270;
             } else if(Math.sin(angle) < 0 && Math.cos(angle) < 0) {
-                  var a = 0;
+                  a = 0;
             }
 
             return "<rect height='"+ w +
