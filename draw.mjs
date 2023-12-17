@@ -2,6 +2,7 @@ class Shape {
       constructor(x, y) {
             this.x =x;
             this.y=y;
+            this.color = "#000000";
       }      
   
       drawShape() {
@@ -23,6 +24,7 @@ class Rect extends Shape {
       drawShape() {
             this.width = Math.abs(draw.startX - draw.endX);
             this.height = Math.abs(draw.startY - draw.endY);
+            this.color = document.getElementById("colorPicker").value;
             this.x = draw.startX;
             this.y = draw.startY;
       }
@@ -61,34 +63,8 @@ class Rect extends Shape {
                         "' y='" + this.y  + "'" +
                         " transform='rotate("+ a + "," + 
                               draw.startX + "," +
-                              draw.startY +")' />";
-            /*if(diffX < 0 && diffY < 0) {
-                  return "<rect height='"+ this.height +
-                  "' width ='"+ this.width + 
-                  "' x='" + this.x + 
-                  "' y='" + this.y  + "' />";
-            } else if (diffX < 0 && diffY > 0){
-                  return "<rect height='"+ this.width +
-                  "' width ='"+ this.height + 
-                  "' x='" + this.x + 
-                  "' y='" + this.y  + "'" +
-                  " transform='rotate(-90, " + 
-                        draw.startX + "," + draw.startY +")' />";
-            } else if(diffX > 0 && diffY > 0) {
-                  return "<rect height='"+ this.height +
-                  "' width ='"+ this.width + 
-                  "' x='" + this.x + 
-                  "' y='" + this.y  + "'" +
-                  " transform='rotate(-180, " + 
-                        draw.startX + "," + draw.startY +")' />";            
-            } else {
-                  return "<rect height='"+ this.width +
-                  "' width ='"+ this.height + 
-                  "' x='" + this.x + 
-                  "' y='" + this.y  + "'" +
-                  " transform='rotate(-270, " + 
-                        draw.startX + "," + draw.startY +")' />";        
-            }*/
+                              draw.startY +")'" + 
+                        " style='fill:"+ this.color + ";' />";
       }
 }
 
@@ -101,6 +77,7 @@ class Circle extends Shape {
       drawShape() {
             this.x = draw.startX;
             this.y = draw.startY;
+            this.color = document.getElementById("colorPicker").value;
             this.radius = Math.max(Math.abs(draw.startX - draw.endX), 
                                     Math.abs(draw.startY - draw.endY));
       }
@@ -108,8 +85,9 @@ class Circle extends Shape {
       toSVGString() {
             return "  <circle cx='" + this.x +
                         "' cy='" + this.y +
-                        "' r='" + this.radius + "' />";
-      }
+                        "' r='" + this.radius  +
+                        "' style='fill:"+ this.color + ";' />";
+                  }
 
 }
 
@@ -125,6 +103,7 @@ class Line extends Shape {
             this.y1 = draw.startY;
             this.x2 = draw.endX;
             this.y2 = draw.endY;
+            this.color = document.getElementById("colorPicker").value;
       }
 
       toSVGString() {
@@ -132,8 +111,8 @@ class Line extends Shape {
                   "' y1='" + this.y1 +
                   "' x2='" + this.x2 +
                   "' y2='" + this.y2 + 
-                  "' style='stroke:rgb(255, 0, 0);stroke-width:2' />";
-      }
+                  "' style='stroke:"+ this.color + ";' />";
+            }
 }
 
 //import * as Shape from "./shape.mjs";
