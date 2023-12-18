@@ -90,3 +90,8 @@ document.getElementById("rectButton").onclick  = function(event) {
       draw.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Polygon();
   }
+
+  document.getElementById("clearButton").onclick = function(event) {
+      document.getElementById("svg").innerHTML = "";
+      draw.savedSVG = "";
+  }
