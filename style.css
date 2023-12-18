@@ -8,6 +8,10 @@ h1 {
     color: red;
 }
 
+.ui {
+    width: 5%;
+}
+
 svg{
     position: absolute;
     top: 12%;
