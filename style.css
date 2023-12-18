@@ -8,12 +8,6 @@ h1 {
     color: red;
 }
 
-canvas {
-    border: 3px solid gray;
-    display: block;
-    margin: 20px auto;
-}
-
 svg{
     position: absolute;
     top: 12%;
