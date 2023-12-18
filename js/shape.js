@@ -10,7 +10,9 @@ export class Shape {
       drawShape() {
             this.x = Draw.instance.startX;
             this.y = Draw.instance.startY;
-            this.fill = document.getElementById("fillPicker").value
+            this.fill = document.getElementById("fillPicker").value;
+            this.stroke = document.getElementById("strokePicker").value;
+            this.strokeWidth = document.getElementById("strokeNumber").value;
       }
 
       toSVGString() {
@@ -66,7 +68,9 @@ export class Rect extends Shape {
                         " transform='rotate("+ a + "," + 
                                Draw.instance.startX + "," +
                                Draw.instance.startY +")'" + 
-                        " style='fill:"+ this.fill + ";' />";
+                        " style='fill:"+ this.fill + 
+                              "; stroke:" + this.stroke +
+                              "; stroke-width:"+ this.strokeWidth + "' />";
       }
 }
 
@@ -86,7 +90,9 @@ export class Circle extends Shape {
             return "  <circle cx='" + this.x +
                         "' cy='" + this.y +
                         "' r='" + this.radius  +
-                        "' style='fill:"+ this.fill + ";' />";
+                        "' style='fill:"+ this.fill +
+                              "; stroke:" + this.stroke +
+                              "; stroke-width:"+ this.strokeWidth + "' />";
                   }
 
 }
@@ -111,7 +117,9 @@ export class Line extends Shape {
                   "' y1='" + this.y1 +
                   "' x2='" + this.x2 +
                   "' y2='" + this.y2 + 
-                  "' style='stroke:"+ this.fill + ";' />";
+                  "' style='stroke:" + 
+                        this.stroke  +
+                        "; stroke-width:"+ this.strokeWidth + "' />";
             }
 }
 
@@ -133,6 +141,8 @@ export class Polygon extends Shape {
             });
 
             return "  <polygon points='" + strPoints + 
-                  "' style='fill:"+ this.fill + ";stroke:purple;stroke-width:1' />";
+                  "' style='fill:"+ this.fill + 
+                        "; stroke:" + this.stroke + 
+                        "; stroke-width:" + this.strokeWidth + "' />";
       }
 }
