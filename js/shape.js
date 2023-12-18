@@ -116,3 +116,24 @@ export class Line extends Shape {
                   "' style='stroke:"+ this.color + ";' />";
             }
 }
+
+export class Polygon extends Shape {
+      constructor() {
+            super(0, 0);
+            this.points = [];
+      }
+
+      drawShape() {
+            this.points.push([Draw.instance.startX, Draw.instance.startY]);
+      }
+
+      toSVGString() {
+            let strPoints = "";
+            this.points.forEach(point => {
+                  strPoints = strPoints + point[0] + "," + point[1] + " ";
+            });
+
+            return "  <polygon points='" + strPoints + "'"  +
+                  " style='fill:lime;stroke:purple;stroke-width:1' />";
+      }
+}

@@ -1,4 +1,4 @@
-import { Rect, Circle, Line } from "./shape.js";
+import { Rect, Circle, Line, Polygon } from "./shape.js";
 
 export class Draw {
       constructor() {
@@ -39,39 +39,54 @@ const draw = new Draw();
 const svg = document.getElementById('svg');
 
 document.onmousedown = function(event) {
-      draw.dragging = true;
       var coord = Draw.toSVGCoordinates(event, svg);
+      draw.dragging = true;
       draw.startX = coord[0];
       draw.startY = coord[1];
+
+      if(draw.currShape instanceof Polygon && draw.startX > 0 && draw.startY > 0) {
+            draw.currShape.drawShape();
+            svg.innerHTML = draw.savedSVG + draw.currShape.toSVGString();
+      }
 }
 
 document.onmousemove = function(event) {
-      if(draw.dragging) {
+      if(draw.dragging && draw.startX > 0) {
             var coord = Draw.toSVGCoordinates(event, svg);
             draw.endX = coord[0];
             draw.endY = coord[1];
-            draw.currShape.drawShape(draw);
-
-            svg.innerHTML = draw.savedSVG + draw.currShape.toSVGString();
+            if(!(draw.currShape instanceof Polygon)) {
+                  draw.currShape.drawShape();
+                  svg.innerHTML = draw.savedSVG + draw.currShape.toSVGString();
+            } 
       }
 }
 
 document.onmouseup =  function(event) {
       draw.dragging = false;
-      draw.savedSVG = svg.innerHTML;
+      if(!(draw.currShape instanceof Polygon)) {
+            draw.savedSVG = svg.innerHTML;
+      }
 }
 
 // UI
 
 document.getElementById("rectButton").onclick  = function(event) {
+      draw.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Rect(0, 0, 0, 0);
   }
   
   document.getElementById("ellipseButton").onclick = function(event) {
+      draw.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Circle(0, 0, 0)
   }
   
   document.getElementById("lineButton").onclick = function(event) {
+      draw.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Line(0, 0, 0, 0);
   }
 
+  document.getElementById("polyButton").onclick = function(event) {
+      draw.savedSVG = svg.innerHTML;
+      Draw.instance.currShape = new Polygon();
+  }
