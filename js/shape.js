@@ -125,6 +125,7 @@ export class Polygon extends Shape {
 
       drawShape() {
             this.points.push([Draw.instance.startX, Draw.instance.startY]);
+            this.color = document.getElementById("colorPicker").value;
       }
 
       toSVGString() {
@@ -133,7 +134,7 @@ export class Polygon extends Shape {
                   strPoints = strPoints + point[0] + "," + point[1] + " ";
             });
 
-            return "  <polygon points='" + strPoints + "'"  +
-                  " style='fill:lime;stroke:purple;stroke-width:1' />";
+            return "  <polygon points='" + strPoints + 
+                  "' style='fill:"+ this.color + ";stroke:purple;stroke-width:1' />";
       }
 }
