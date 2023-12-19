@@ -1,4 +1,4 @@
-import { Rect, Circle, Line, Polygon } from "./shape.js";
+import { Rect, Circle, Line, Polygon, PolyLine } from "./shape.js";
 
 export class Draw {
       constructor() {
@@ -86,9 +86,14 @@ $("#lineButton").on("click", function(event) {
       Draw.instance.currShape = new Line(0, 0, 0, 0);
 });
 
-$("#polyButton").on("click", function(event) {
+$("#polygonButton").on("click", function(event) {
       draw.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Polygon();
+});
+
+$("#polylineButton").on("click", function(event) {
+      draw.savedSVG = svg.innerHTML;
+      Draw.instance.currShape = new PolyLine();
 });
 
 $("#clearButton").on("click", function(event) {

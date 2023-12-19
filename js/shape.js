@@ -146,3 +146,24 @@ export class Polygon extends Shape {
                         "; stroke-width:" + this.strokeWidth + "' />";
       }
 }
+
+// PolyLine class is almost extact copy of Polygon
+// Only diff is <polygon> vs <polyline>
+export class PolyLine extends Polygon {
+      constructor() {
+            super();
+      }
+
+      toSVGString() {
+            let strPoints = "";
+            this.points.forEach(point => {
+                  strPoints = strPoints + point[0] + "," + point[1] + " ";
+            });
+
+            return "  <polyline points='" + strPoints + 
+                  "' style='fill:none" + 
+                        "; stroke:" + this.stroke + 
+                        "; stroke-width:" + this.strokeWidth + "' />";
+      }
+
+}
