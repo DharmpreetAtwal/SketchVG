@@ -10,9 +10,9 @@ export class Shape {
       drawShape() {
             this.x = Draw.instance.startX;
             this.y = Draw.instance.startY;
-            this.fill = document.getElementById("fillPicker").value;
-            this.stroke = document.getElementById("strokePicker").value;
-            this.strokeWidth = document.getElementById("strokeNumber").value;
+            this.fill = $("#fillPicker").val();
+            this.stroke = $("#strokePicker").val();
+            this.strokeWidth = $("#strokeNumber").val();
       }
 
       toSVGString() {

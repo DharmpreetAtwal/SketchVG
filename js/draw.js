@@ -71,27 +71,27 @@ document.onmouseup =  function(event) {
 
 // UI
 
-document.getElementById("rectButton").onclick  = function(event) {
+$("#rectButton").on("click", function(event) {
       draw.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Rect(0, 0, 0, 0);
-  }
+});
   
-  document.getElementById("ellipseButton").onclick = function(event) {
+$("#ellipseButton").on("click",  function(event) {
       draw.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Circle(0, 0, 0)
-  }
+});
   
-  document.getElementById("lineButton").onclick = function(event) {
+$("#lineButton").on("click", function(event) {
       draw.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Line(0, 0, 0, 0);
-  }
+});
 
-  document.getElementById("polyButton").onclick = function(event) {
+$("#polyButton").on("click", function(event) {
       draw.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Polygon();
-  }
+});
 
-  document.getElementById("clearButton").onclick = function(event) {
-      document.getElementById("svg").innerHTML = "";
+$("#clearButton").on("click", function(event) {
+      svg.innerHTML = "";
       draw.savedSVG = "";
-  }
+});
