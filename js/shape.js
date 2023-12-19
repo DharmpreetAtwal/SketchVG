@@ -1,9 +1,9 @@
 import { Draw } from "./draw.js";
 
 export class Shape {
-      constructor(x, y) {
-            this.x =x;
-            this.y=y;
+      constructor() {
+            this.x =0;
+            this.y=0;
             this.fill = "#000000";
       }      
   
@@ -21,10 +21,10 @@ export class Shape {
 }
   
 export class Rect extends Shape {
-      constructor(x, y, h, w) {
-            super(x, y);
-            this.height = h;
-            this.width = w;
+      constructor() {
+            super();
+            this.height = 0;
+            this.width = 0;
       }
   
       drawShape() {
@@ -75,9 +75,9 @@ export class Rect extends Shape {
 }
 
 export class Circle extends Shape {
-      constructor(x, y, r) {
-            super(x, y);
-            this.radius = r;
+      constructor() {
+            super();
+            this.radius = 0;
       }
 
       drawShape() {
@@ -98,10 +98,10 @@ export class Circle extends Shape {
 }
 
 export class Line extends Shape {
-      constructor(x1, y1, x2, y2) {
-            super(x1, y1);
-            this.x2 = x2;
-            this.y2 = y2;
+      constructor() {
+            super();
+            this.x2 = 0;
+            this.y2 = 0;
       }
 
       drawShape() {
@@ -125,7 +125,7 @@ export class Line extends Shape {
 
 export class Polygon extends Shape {
       constructor() {
-            super(0, 0);
+            super();
             this.points = [];
       }
 
@@ -166,4 +166,29 @@ export class PolyLine extends Polygon {
                         "; stroke-width:" + this.strokeWidth + "' />";
       }
 
+}
+
+export class Path extends Shape {
+      constructor() {
+            super();
+            this.points = [];
+      }
+      drawShape() {
+            if(this.points.length == 0) {
+                  this.points.push([Draw.instance.startX, Draw.instance.startY]);
+            } else {
+                  let diffX = Draw.instance.endX - Draw.instance.startX;
+                  let diffY = Draw.instance.endY - Draw.instance.startY;
+
+                  let prevPoint = this.points[this.points.length - 1]
+                  let nextPoint = [prevPoint[0] + diffX, prevPoint[1] + diffY];
+                  let midPoint = [prevPoint[0] + nextPoint[0], 
+                                    prevPoint[1] + nextPoint[1]];
+                                    
+            }
+      }
+
+      toSVGString() {
+
+      }
 }
