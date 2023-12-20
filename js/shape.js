@@ -172,23 +172,43 @@ export class Path extends Shape {
       constructor() {
             super();
             this.points = [];
+            this.pointsToAdd = [];
       }
+
       drawShape() {
             if(this.points.length == 0) {
                   this.points.push([Draw.instance.startX, Draw.instance.startY]);
-            } else {
+            } 
+            /*else if(!Draw.instance.dragging) {
+                  this.points.push(this.pointsToAdd[0])
+                  this.points.push(this.pointsToAdd[1])
+                  this.pointsToAdd = [];
+            } */
+            else {
                   let diffX = Draw.instance.endX - Draw.instance.startX;
                   let diffY = Draw.instance.endY - Draw.instance.startY;
 
                   let prevPoint = this.points[this.points.length - 1]
-                  let nextPoint = [prevPoint[0] + diffX, prevPoint[1] + diffY];
-                  let midPoint = [prevPoint[0] + nextPoint[0], 
-                                    prevPoint[1] + nextPoint[1]];
-                                    
+                  let nextPoint = [Draw.instance.startX, Draw.instance.startY];
+                  let midPoint = [((prevPoint[0] + nextPoint[0]) / 2) + diffX, 
+                                    ((prevPoint[1] + nextPoint[1]) / 2) + diffY];
+
+                  this.pointsToAdd = [midPoint, nextPoint];
             }
       }
 
       toSVGString() {
+            let d = "M " + this.points[0][0] + " " + this.points[0][1];
+            for(let i=1; i < this.points.length - 1; i++) {
+                  d = d + " Q " + this.points[i][0] + " " + this.points[i][1] + " " +
+                        this.points[i+1][0] + " " + this.points[i+1][1];
+            }
 
+            if(this.pointsToAdd.length == 2) {
+                  d = d + " Q " + this.pointsToAdd[0][0] + " " + this.pointsToAdd[0][1] + " " +
+                  this.pointsToAdd[1][0]  + " " + this.pointsToAdd[1][1];
+            }
+            
+            return "  <path d='"+ d + "' stroke='blue' stroke-width='5' fill='none' />";
       }
 }
