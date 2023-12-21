@@ -217,3 +217,21 @@ export class Path extends Shape {
                   "' fill='none' />";
       }
 }
+
+export class MyText extends Shape {
+      constructor() {
+            super();
+      }
+
+      drawShape() {
+            super.drawShape();
+      }
+
+      toSVGString() {
+            return "  <text x='"+ this.x + 
+                        "' y='"+ this.y +
+                         "' fill='"+ this.fill + 
+                         "' stroke='"+ this.stroke  + 
+                         "' font-size='"+ this.strokeWidth +"'>"+ $("#textString").val() + "</text>";
+      }
+}
