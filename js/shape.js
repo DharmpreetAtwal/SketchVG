@@ -176,6 +176,7 @@ export class Path extends Shape {
       }
 
       drawShape() {
+            super.drawShape();
             if(this.points.length == 0) {
                   this.points.push([Draw.instance.startX, Draw.instance.startY]);
             }
@@ -210,6 +211,9 @@ export class Path extends Shape {
                   this.pointsToAdd[1][0]  + " " + this.pointsToAdd[1][1];
             }
             
-            return "  <path d='"+ d + "' stroke='blue' stroke-width='5' fill='none' />";
+            return "  <path d='"+ d + 
+                  "' stroke='" + this.stroke + 
+                  "' stroke-width='"+ this.strokeWidth + 
+                  "' fill='none' />";
       }
 }

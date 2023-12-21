@@ -38,6 +38,15 @@ export class Draw {
 const draw = new Draw();
 const svg = document.getElementById('svg');
 
+function inBounds() {
+      return (Draw.instance.startX > 0 && Draw.instance.startY > 0)
+}
+
+function displayDrawing() {
+      Draw.instance.currShape.drawShape();
+      svg.innerHTML = Draw.instance.savedSVG + Draw.instance.currShape.toSVGString();
+}
+
 document.onmousedown = function(event) {
       var coord = Draw.toSVGCoordinates(event, svg);
       Draw.instance.dragging = true;
@@ -46,30 +55,28 @@ document.onmousedown = function(event) {
       Draw.instance.endX = Math.round(coord[0]);
       Draw.instance.endY = Math.round(coord[1]);
 
-      if( (Draw.instance.currShape instanceof Polygon || Draw.instance.currShape instanceof Path)
-            && Draw.instance.startX > 0 && Draw.instance.startY > 0) {
-            Draw.instance.currShape.drawShape();
-            svg.innerHTML = Draw.instance.savedSVG + Draw.instance.currShape.toSVGString();
+      if( (Draw.instance.currShape instanceof Polygon 
+            || Draw.instance.currShape instanceof Path)
+            && inBounds()) {
+            displayDrawing()
       }
 }
 
 document.onmousemove = function(event) {
-      if(Draw.instance.dragging && Draw.instance.startX > 0 && Draw.instance.startY > 0) {
+      if(Draw.instance.dragging && inBounds()) {
             var coord = Draw.toSVGCoordinates(event, svg);
             Draw.instance.endX = Math.round(coord[0])
             Draw.instance.endY = Math.round(coord[1])
             if(!(Draw.instance.currShape instanceof Polygon)) {
-                  Draw.instance.currShape.drawShape();
-                  svg.innerHTML = Draw.instance.savedSVG + Draw.instance.currShape.toSVGString();
+                  displayDrawing()
             }  
       }
 }
 
 document.onmouseup =  function(event) {
-      if(Draw.instance.startX > 0 && Draw.instance.startY > 0) {
+      if(inBounds()) {
             Draw.instance.dragging = false;
-            Draw.instance.currShape.drawShape()
-            svg.innerHTML = Draw.instance.savedSVG + Draw.instance.currShape.toSVGString();
+            displayDrawing()
             if(!(Draw.instance.currShape instanceof Polygon || Draw.instance.currShape instanceof Path)) {
                   Draw.instance.savedSVG = svg.innerHTML;
             } 
@@ -90,7 +97,7 @@ $("#ellipseButton").on("click",  function(event) {
   
 $("#lineButton").on("click", function(event) {
       Draw.instance.savedSVG = svg.innerHTML;
-      Draw.instance.currShape = new Line(0, 0, 0, 0);
+      Draw.instance.currShape = new Line();
 });
 
 $("#polygonButton").on("click", function(event) {
@@ -111,4 +118,5 @@ $("#pathButton").on("click", function(event) {
 $("#clearButton").on("click", function(event) {
       svg.innerHTML = "";
       Draw.instance.savedSVG = "";
+      Draw.instance.currShape = new Line()
 });
