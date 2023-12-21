@@ -40,70 +40,75 @@ const svg = document.getElementById('svg');
 
 document.onmousedown = function(event) {
       var coord = Draw.toSVGCoordinates(event, svg);
-      draw.dragging = true;
-      draw.startX = Math.round(coord[0]);
-      draw.startY = Math.round(coord[1]);
+      Draw.instance.dragging = true;
+      Draw.instance.startX = Math.round(coord[0]);
+      Draw.instance.startY = Math.round(coord[1]);
+      Draw.instance.endX = Math.round(coord[0]);
+      Draw.instance.endY = Math.round(coord[1]);
 
-      if( (draw.currShape instanceof Polygon || draw.currShape instanceof Path)
-            && draw.startX > 0 && draw.startY > 0) {
-            draw.currShape.drawShape();
-            svg.innerHTML = draw.savedSVG + draw.currShape.toSVGString();
+      if( (Draw.instance.currShape instanceof Polygon || Draw.instance.currShape instanceof Path)
+            && Draw.instance.startX > 0 && Draw.instance.startY > 0) {
+            Draw.instance.currShape.drawShape();
+            svg.innerHTML = Draw.instance.savedSVG + Draw.instance.currShape.toSVGString();
       }
 }
 
 document.onmousemove = function(event) {
-      if(draw.dragging && draw.startX > 0) {
+      if(Draw.instance.dragging && Draw.instance.startX > 0 && Draw.instance.startY > 0) {
             var coord = Draw.toSVGCoordinates(event, svg);
-            draw.endX = Math.round(coord[0])
-            draw.endY = Math.round(coord[1])
-            if(!(draw.currShape instanceof Polygon)) {
-                  draw.currShape.drawShape();
-                  svg.innerHTML = draw.savedSVG + draw.currShape.toSVGString();
+            Draw.instance.endX = Math.round(coord[0])
+            Draw.instance.endY = Math.round(coord[1])
+            if(!(Draw.instance.currShape instanceof Polygon)) {
+                  Draw.instance.currShape.drawShape();
+                  svg.innerHTML = Draw.instance.savedSVG + Draw.instance.currShape.toSVGString();
             }  
       }
 }
 
 document.onmouseup =  function(event) {
-      Draw.instance.dragging = false;
-     // draw.currShape.drawShape()
-      if(!(draw.currShape instanceof Polygon || draw.currShape instanceof Path)) {
-            draw.savedSVG = svg.innerHTML;
-      } 
+      if(Draw.instance.startX > 0 && Draw.instance.startY > 0) {
+            Draw.instance.dragging = false;
+            Draw.instance.currShape.drawShape()
+            svg.innerHTML = Draw.instance.savedSVG + Draw.instance.currShape.toSVGString();
+            if(!(Draw.instance.currShape instanceof Polygon || Draw.instance.currShape instanceof Path)) {
+                  Draw.instance.savedSVG = svg.innerHTML;
+            } 
+      }
 }
 
 // UI
 
 $("#rectButton").on("click", function(event) {
-      draw.savedSVG = svg.innerHTML;
+      Draw.instance.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Rect(0, 0, 0, 0);
 });
   
 $("#ellipseButton").on("click",  function(event) {
-      draw.savedSVG = svg.innerHTML;
+      Draw.instance.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Circle(0, 0, 0)
 });
   
 $("#lineButton").on("click", function(event) {
-      draw.savedSVG = svg.innerHTML;
+      Draw.instance.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Line(0, 0, 0, 0);
 });
 
 $("#polygonButton").on("click", function(event) {
-      draw.savedSVG = svg.innerHTML;
+      Draw.instance.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Polygon();
 });
 
 $("#polylineButton").on("click", function(event) {
-      draw.savedSVG = svg.innerHTML;
+      Draw.instance.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new PolyLine();
 });
 
 $("#pathButton").on("click", function(event) {
-      draw.savedSVG = svg.innerHTML;
+      Draw.instance.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Path();
 });
 
 $("#clearButton").on("click", function(event) {
       svg.innerHTML = "";
-      draw.savedSVG = "";
+      Draw.instance.savedSVG = "";
 });

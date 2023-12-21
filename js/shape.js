@@ -178,28 +178,29 @@ export class Path extends Shape {
       drawShape() {
             if(this.points.length == 0) {
                   this.points.push([Draw.instance.startX, Draw.instance.startY]);
-            } 
-            /*else if(!Draw.instance.dragging) {
-                  this.points.push(this.pointsToAdd[0])
-                  this.points.push(this.pointsToAdd[1])
-                  this.pointsToAdd = [];
-            } */
-            else {
+            }
+            else if(Draw.instance.dragging && this.points.length > 0){
                   let diffX = Draw.instance.endX - Draw.instance.startX;
                   let diffY = Draw.instance.endY - Draw.instance.startY;
 
                   let prevPoint = this.points[this.points.length - 1]
                   let nextPoint = [Draw.instance.startX, Draw.instance.startY];
-                  let midPoint = [((prevPoint[0] + nextPoint[0]) / 2) + diffX, 
-                                    ((prevPoint[1] + nextPoint[1]) / 2) + diffY];
+                  let midPoint = [((prevPoint[0] + nextPoint[0]) / 2) - diffX, 
+                                    ((prevPoint[1] + nextPoint[1]) / 2) - diffY];
 
                   this.pointsToAdd = [midPoint, nextPoint];
+            } 
+            else if(((!Draw.instance.dragging) && this.pointsToAdd.length == 2)) {
+                  this.points.push(this.pointsToAdd[0])
+                  this.points.push(this.pointsToAdd[1])
+                  this.pointsToAdd = [];
             }
       }
 
       toSVGString() {
             let d = "M " + this.points[0][0] + " " + this.points[0][1];
-            for(let i=1; i < this.points.length - 1; i++) {
+  
+            for(let i=1; i < this.points.length - 1; i=i+2) {
                   d = d + " Q " + this.points[i][0] + " " + this.points[i][1] + " " +
                         this.points[i+1][0] + " " + this.points[i+1][1];
             }
