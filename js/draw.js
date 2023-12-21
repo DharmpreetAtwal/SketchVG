@@ -47,7 +47,7 @@ function displayDrawing() {
       svg.innerHTML = Draw.instance.savedSVG + Draw.instance.currShape.toSVGString();
 }
 
-document.onmousedown = function(event) {
+$(document).on('mousedown', function(event) {
       var coord = Draw.toSVGCoordinates(event, svg);
       Draw.instance.dragging = true;
       Draw.instance.startX = Math.round(coord[0]);
@@ -60,9 +60,9 @@ document.onmousedown = function(event) {
             && inBounds()) {
             displayDrawing()
       }
-}
+});
 
-document.onmousemove = function(event) {
+$(document).on('mousemove', function(event) {
       if(Draw.instance.dragging && inBounds()) {
             var coord = Draw.toSVGCoordinates(event, svg);
             Draw.instance.endX = Math.round(coord[0])
@@ -71,9 +71,9 @@ document.onmousemove = function(event) {
                   displayDrawing()
             }  
       }
-}
+});
 
-document.onmouseup =  function(event) {
+$(document).on('mouseup', function(event) {
       if(inBounds()) {
             Draw.instance.dragging = false;
             displayDrawing()
@@ -81,7 +81,7 @@ document.onmouseup =  function(event) {
                   Draw.instance.savedSVG = svg.innerHTML;
             } 
       }
-}
+});
 
 // UI
 
@@ -90,7 +90,7 @@ $("#rectButton").on("click", function(event) {
       Draw.instance.currShape = new Rect(0, 0, 0, 0);
 });
   
-$("#ellipseButton").on("click",  function(event) {
+$("#circleButton").on("click",  function(event) {
       Draw.instance.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new Circle(0, 0, 0)
 });
