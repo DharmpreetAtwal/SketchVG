@@ -127,3 +127,11 @@ $("#clearButton").on("click", function(event) {
       Draw.instance.currShape = new Line()
 });
 
+$("#fillPicker").on("change", function() {
+      $(".customize").css('color', $(this).val());
+});
+
+$("#strokePicker").on("change", function() {
+      $(".customize").css('border-color', $(this).val());
+
+});

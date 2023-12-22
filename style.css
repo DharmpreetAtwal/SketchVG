@@ -33,6 +33,13 @@ h1 {
     max-width: 90%;
     height: 40px;
     font-size: 30px;
+    border-radius: 12px;
+    border: 2px solid black; 
+}
+
+.customize {
+    color: #ff0000;
+    border: 2px solid #ff0000; 
 }
 
 #pathButton {
