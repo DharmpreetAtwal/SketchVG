@@ -118,6 +118,7 @@ $("#pathButton").on("click", function(event) {
 $("#textButton").on("click", function(event) {
       Draw.instance.savedSVG = svg.innerHTML;
       Draw.instance.currShape = new MyText();
+      $("#textString").val("ENTER TEXT");
 });
 
 $("#clearButton").on("click", function(event) {

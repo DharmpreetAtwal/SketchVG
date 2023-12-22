@@ -4,28 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/8e8292de14.js" crossorigin="anonymous"></script>
+
     <title>DRAWING PROGRAM</title>
 </head>
 <body>
     <h1 id="title"> DRAW: </h1>
-    <svg id='svg'></svg>
     <script src="./node_modules/jquery/dist/jquery.min.js"> </script>
     <script type="module" src="./js/draw.js"> </script>
     
-    <button class="ui" id="rectButton"> Rect </button> <br>
-    <button class="ui" id="circleButton"> Circle </button> <br> 
-    <button class="ui" id="lineButton"> Line </button>  <br>
-    <button class="ui" id="polygonButton"> Polygon </button> <br>
-    <button class="ui" id="polylineButton"> Polyline </button> <br>
-    <button class="ui" id="pathButton"> Path </button> <br>
-    <input  class="ui" id="fillPicker" type="color" value="#ff0000"> <br>
-    <input  class="ui" id="strokePicker" type="color" value="#ff0000"> <br>
-    <input  class="ui" id="strokeNumber" type="number"> <br> 
-    <br>
-    <button class="ui" id="textButton"> Text </button> <br>
-    <input  class="ui"  id="textString" type="text"> </input> <br>
-    <br>
-    <button class="ui" id="clearButton"> Clear </button>
+    <svg id='svg'></svg>
+    <div class="ui-container">
+        <button class="mybutton" id="selectButton"> </button> 
+        <button class="mybutton fa fa-square" id="rectButton"> </button> 
+        <button class=" mybutton fa fa-circle" id="circleButton"> </button>  
+        <button class=" mybutton fa fa-long-arrow-right" id="lineButton"> </button>  
+        <button class=" mybutton fa-solid fa-draw-polygon" id="polygonButton"> </button> 
+        <button class=" mybutton fa fa-solid fa-arrow-trend-up" id="polylineButton"> </button> 
+        <button class=" mybutton fa-solid fa-bezier-curve" id="pathButton"> </button> 
+        
+        <div class="color-icon-container"> 
+            <input class="color-input" id="fillPicker" type="color" value="#ff0000">  
+            <i class="icon-overlay fa-solid fa-fill-drip"></i>
+        </div>
+        <div class="color-icon-container"> 
+            <input  class="color-input" id="strokePicker" type="color" value="#ff0000"> 
+            <i class="icon-overlay icon-overlay1 fa-solid fa-fill-drip"></i> 
+            <i class="icon-overlay icon-overlay2 fa-solid fa-grip-lines-vertical"></i> 
+        </div>
+        <div class="color-icon-container"> 
+            <input class="mynumberbox" id="strokeNumber" type="number">  
+            <i class="icon-overlay icon-overlay2 fa-solid fa-list-ol"></i>
+        </div>
+        
+        <button class="mybutton fa-solid fa-font" id="textButton"> </button> 
+        <input class="mytextbox" id="textString" type="text"> </input> 
+        
+        <button class="mybutton fa-solid fa-trash-can" id="clearButton"> </button>
+    </div>
 
 </body>
 </html> 

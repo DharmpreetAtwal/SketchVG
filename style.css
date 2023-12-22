@@ -12,9 +12,77 @@ h1 {
     color: red;
 }
 
-.ui {
-    width: 5%;
+.ui-container {
+    max-width: 7%; 
+    position: absolute;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    background-color: lightsalmon;
+    display: flex;
+    flex-direction: column;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    align-items: center;
+    margin: 0;
+    top: 50%;
+
 }
+
+.mybutton {
+    min-width: 90%;
+    max-width: 90%;
+    height: 40px;
+    font-size: 30px;
+}
+
+#pathButton {
+    margin-bottom: 10%;
+}
+
+#textButton {
+    margin-top: 10%;
+}
+
+#textString {
+    margin-bottom: 10%;
+}
+
+.color-icon-container {
+    position: relative;
+    width: 90%;
+  }
+
+  .color-input {
+    height: 50px;
+    width: 100%;
+  }
+
+.icon-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: black; 
+    cursor: pointer;
+    pointer-events: none;
+}
+
+.icon-overlay1 {
+    transform: translate(-100%, -50%);
+}
+
+.icon-overlay2 {
+    transform: translate(80%, -50%);
+}
+
+.mytextbox {
+    min-width: 80%;
+    max-width: 80%;
+}
+
+.mynumberbox {
+    min-width: 90%;
+    max-width: 90%;}
 
 svg{
     position: absolute;
