@@ -7,7 +7,7 @@ export class Draw {
             }
 
             this.savedSVG = "";
-            this.currShape = new Line(0, 0, 0, 0);
+            this.currShape = null;
             this.dragging = false;
             this.startX = 0;
             this.startY = 0;
@@ -83,7 +83,49 @@ $(document).on('mouseup', function(event) {
       }
 });
 
+
+// ANIMATION
+var lastClicked = null;
+$(".mybutton").on({
+      "click": function(event) {
+            if(!$(this).is(lastClicked)) {
+                  if(lastClicked) {
+                        lastClicked.animate({
+                              top: '-=5',
+                              opacity: '1.0'}, 
+                              "slow");
+                  }
+      
+                  $(this).animate({
+                        top: '+=5',
+                        opacity: '0.4'}, 
+                        "slow");
+                  
+                  lastClicked = $(this);
+                  console.log(lastClicked)
+            }
+      }, 
+      "mouseenter": function(event) {
+            if(!$(this).is(lastClicked)) {
+                  $(this).animate({
+                        top: '+=2'}, 
+                        "fast"); 
+            }     
+      }, 
+      "mouseleave": function(event) {
+            if(!$(this).is(lastClicked)) {
+                  $(this).animate({
+                        top: '-=2'}, 
+                        "fast");   
+            }
+      }});
+
 // UI
+
+$("#selectButton").on("click", function(event) {
+      Draw.instance.savedSVG = svg.innerHTML;
+      Draw.instance.currShape = null;
+});
 
 $("#rectButton").on("click", function(event) {
       Draw.instance.savedSVG = svg.innerHTML;
@@ -133,5 +175,5 @@ $("#fillPicker").on("change", function() {
 
 $("#strokePicker").on("change", function() {
       $(".customize").css('border-color', $(this).val());
-
 });
+
