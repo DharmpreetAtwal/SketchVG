@@ -12,8 +12,8 @@ export class Shape {
       }      
   
       drawShape() {
-            this.x = Draw.instance.startX;
-            this.y = Draw.instance.startY;
+            this.x = Draw.startX;
+            this.y = Draw.startY;
             this.fill = $("#fillPicker").val();
             this.stroke = $("#strokePicker").val();
             this.strokeWidth = $("#strokeNumber").val();
@@ -33,13 +33,13 @@ export class Rect extends Shape {
   
       drawShape() {
             super.drawShape();
-            this.width = Math.abs( Draw.instance.startX -  Draw.instance.endX);
-            this.height = Math.abs( Draw.instance.startY -  Draw.instance.endY);
+            this.width = Math.abs( Draw.startX -  Draw.endX);
+            this.height = Math.abs( Draw.startY -  Draw.endY);
       }
 
       toSVGString() {
-            var diffX =  Draw.instance.endX -  Draw.instance.startX;
-            var diffY =  Draw.instance.endY -  Draw.instance.startY;
+            var diffX =  Draw.endX -  Draw.startX;
+            var diffY =  Draw.endY -  Draw.startY;
             var angle = -1 * Math.atan(diffY/diffX);
 
             if(diffX < 0) {
@@ -70,8 +70,8 @@ export class Rect extends Shape {
                         "' x='" + this.x + 
                         "' y='" + this.y  + "'" +
                         " transform='rotate("+ a + "," + 
-                               Draw.instance.startX + "," +
-                               Draw.instance.startY +")'" + 
+                               Draw.startX + "," +
+                               Draw.startY +")'" + 
                         " style='fill:"+ this.fill + 
                               "; stroke:" + this.stroke +
                               "; stroke-width:"+ this.strokeWidth + "' />";
@@ -106,8 +106,8 @@ export class Circle extends Shape {
 
       drawShape() {
             super.drawShape()
-            this.radius = Math.max(Math.abs( Draw.instance.startX -  Draw.instance.endX), 
-                                    Math.abs( Draw.instance.startY -  Draw.instance.endY));
+            this.radius = Math.max(Math.abs( Draw.startX -  Draw.endX), 
+                                    Math.abs( Draw.startY -  Draw.endY));
       }
 
       toSVGString() {
@@ -150,10 +150,10 @@ export class Line extends Shape {
 
       drawShape() {
             super.drawShape();
-            this.x1 =  Draw.instance.startX;
-            this.y1 =  Draw.instance.startY;
-            this.x2 =  Draw.instance.endX;
-            this.y2 =  Draw.instance.endY;
+            this.x1 =  Draw.startX;
+            this.y1 =  Draw.startY;
+            this.x2 =  Draw.endX;
+            this.y2 =  Draw.endY;
       }
 
       toSVGString() {
@@ -201,7 +201,7 @@ export class Polygon extends Shape {
 
       drawShape() {
             super.drawShape()
-            this.points.push([Draw.instance.startX, Draw.instance.startY]);
+            this.points.push([Draw.startX, Draw.startY]);
       }
 
       toSVGString() {
@@ -278,20 +278,20 @@ export class Path extends Shape {
       drawShape() {
             super.drawShape();
             if(this.points.length == 0) {
-                  this.points.push([Draw.instance.startX, Draw.instance.startY]);
+                  this.points.push([Draw.startX, Draw.startY]);
             }
-            else if(Draw.instance.dragging && this.points.length > 0){
-                  let diffX = Draw.instance.endX - Draw.instance.startX;
-                  let diffY = Draw.instance.endY - Draw.instance.startY;
+            else if(Draw.dragging && this.points.length > 0){
+                  let diffX = Draw.endX - Draw.startX;
+                  let diffY = Draw.endY - Draw.startY;
 
                   let prevPoint = this.points[this.points.length - 1]
-                  let nextPoint = [Draw.instance.startX, Draw.instance.startY];
+                  let nextPoint = [Draw.startX, Draw.startY];
                   let midPoint = [((prevPoint[0] + nextPoint[0]) / 2) - diffX, 
                                     ((prevPoint[1] + nextPoint[1]) / 2) - diffY];
 
                   this.pointsToAdd = [midPoint, nextPoint];
             } 
-            else if(((!Draw.instance.dragging) && this.pointsToAdd.length == 2)) {
+            else if(((!Draw.dragging) && this.pointsToAdd.length == 2)) {
                   this.points.push(this.pointsToAdd[0])
                   this.points.push(this.pointsToAdd[1])
                   this.pointsToAdd = [];
@@ -325,7 +325,6 @@ $("svg").on({
             Selector.shape = $(this);
             Selector.points = Selector.shape.attr('d').split(' ')
             Selector.points = Selector.points.filter(word => !/[A-Z]/.test(word));
-            console.log(Selector.points);
             Selector.clickX = coord[0];
             Selector.clickY = coord[1];
       },
@@ -344,7 +343,6 @@ $("svg").on({
                         if(i != Selector.points.length - 4 ) {
                               dStr = dStr + " Q "
                         }
-                        console.log(dStr)
                   }
 
                   Selector.shape.attr({ d:dStr });
