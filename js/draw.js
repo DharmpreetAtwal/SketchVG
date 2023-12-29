@@ -1,4 +1,5 @@
-import { Rect, Circle, Line, Polygon, PolyLine, Path, MyText } from "./shape.js";
+import * as Shape from "./shape.js";
+import { Selector } from "./selector.js";
 
 export class Draw {
       constructor() {
@@ -43,8 +44,10 @@ function inBounds() {
 }
 
 function displayDrawing() {
-      Draw.instance.currShape.drawShape();
-      svg.innerHTML = Draw.instance.savedSVG + Draw.instance.currShape.toSVGString();
+      if(!(Draw.instance.currShape instanceof Selector)) {
+            Draw.instance.currShape.drawShape();
+            svg.innerHTML = Draw.instance.savedSVG + Draw.instance.currShape.toSVGString();
+      }
 }
 
 $(document).on('mousedown', function(event) {
@@ -55,11 +58,10 @@ $(document).on('mousedown', function(event) {
       Draw.instance.endX = Math.round(coord[0]);
       Draw.instance.endY = Math.round(coord[1]);
 
-      if( (Draw.instance.currShape instanceof Polygon 
-            || Draw.instance.currShape instanceof Path)
+      if( (Draw.instance.currShape instanceof Shape.Path)
             && inBounds()) {
             displayDrawing()
-      }
+      } 
 });
 
 $(document).on('mousemove', function(event) {
@@ -67,9 +69,9 @@ $(document).on('mousemove', function(event) {
             var coord = Draw.toSVGCoordinates(event, svg);
             Draw.instance.endX = Math.round(coord[0])
             Draw.instance.endY = Math.round(coord[1])
-            if(!(Draw.instance.currShape instanceof Polygon)) {
+            if(!(Draw.instance.currShape instanceof Shape.Polygon)) {
                   displayDrawing()
-            }  
+            } 
       }
 });
 
@@ -77,96 +79,58 @@ $(document).on('mouseup', function(event) {
       if(inBounds()) {
             Draw.instance.dragging = false;
             displayDrawing()
-            if(!(Draw.instance.currShape instanceof Polygon || Draw.instance.currShape instanceof Path)) {
+            if(!(Draw.instance.currShape instanceof Shape.Polygon || Draw.instance.currShape instanceof Shape.Path)) {
                   Draw.instance.savedSVG = svg.innerHTML;
             } 
       }
 });
 
-
-// ANIMATION
-var lastClicked = null;
-$(".mybutton").on({
-      "click": function(event) {
-            if(!$(this).is(lastClicked)) {
-                  if(lastClicked) {
-                        lastClicked.animate({
-                              top: '-=5',
-                              opacity: '1.0'}, 
-                              "slow");
-                  }
-      
-                  $(this).animate({
-                        top: '+=5',
-                        opacity: '0.4'}, 
-                        "slow");
-                  
-                  lastClicked = $(this);
-                  console.log(lastClicked)
-            }
-      }, 
-      "mouseenter": function(event) {
-            if(!$(this).is(lastClicked)) {
-                  $(this).animate({
-                        top: '+=2'}, 
-                        "fast"); 
-            }     
-      }, 
-      "mouseleave": function(event) {
-            if(!$(this).is(lastClicked)) {
-                  $(this).animate({
-                        top: '-=2'}, 
-                        "fast");   
-            }
-      }});
-
 // UI
-
 $("#selectButton").on("click", function(event) {
       Draw.instance.savedSVG = svg.innerHTML;
-      Draw.instance.currShape = null;
+      Draw.instance.currShape = new Selector();
 });
 
 $("#rectButton").on("click", function(event) {
       Draw.instance.savedSVG = svg.innerHTML;
-      Draw.instance.currShape = new Rect(0, 0, 0, 0);
+      Draw.instance.currShape = new Shape.Rect();
 });
   
 $("#circleButton").on("click",  function(event) {
       Draw.instance.savedSVG = svg.innerHTML;
-      Draw.instance.currShape = new Circle(0, 0, 0)
+      Draw.instance.currShape = new Shape.Circle()
 });
   
 $("#lineButton").on("click", function(event) {
       Draw.instance.savedSVG = svg.innerHTML;
-      Draw.instance.currShape = new Line();
+      Draw.instance.currShape = new Shape.Line();
 });
 
 $("#polygonButton").on("click", function(event) {
       Draw.instance.savedSVG = svg.innerHTML;
-      Draw.instance.currShape = new Polygon();
+      Draw.instance.currShape = new Shape.Polygon();
 });
 
 $("#polylineButton").on("click", function(event) {
       Draw.instance.savedSVG = svg.innerHTML;
-      Draw.instance.currShape = new PolyLine();
+      Draw.instance.currShape = new Shape.PolyLine();
 });
 
 $("#pathButton").on("click", function(event) {
       Draw.instance.savedSVG = svg.innerHTML;
-      Draw.instance.currShape = new Path();
+      Draw.instance.currShape = new Shape.Path();
 });
 
 $("#textButton").on("click", function(event) {
       Draw.instance.savedSVG = svg.innerHTML;
-      Draw.instance.currShape = new MyText();
+      Draw.instance.currShape = new Shape.MyText();
       $("#textString").val("ENTER TEXT");
 });
 
 $("#clearButton").on("click", function(event) {
       svg.innerHTML = "";
       Draw.instance.savedSVG = "";
-      Draw.instance.currShape = new Line()
+      Draw.instance.currShape = new Shape.Line()
 });
 
 $("#fillPicker").on("change", function() {
@@ -176,4 +140,3 @@ $("#fillPicker").on("change", function() {
 $("#strokePicker").on("change", function() {
       $(".customize").css('border-color', $(this).val());
 });
-

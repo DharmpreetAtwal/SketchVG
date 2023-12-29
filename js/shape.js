@@ -1,10 +1,14 @@
 import { Draw } from "./draw.js";
+import { Selector } from "./selector.js";
 
 export class Shape {
+      static list = [];
       constructor() {
             this.x =0;
             this.y=0;
             this.fill = "#000000";
+            //this.index = Shape.list.push(this) - 1;
+            //console.log(Shape.list);
       }      
   
       drawShape() {
@@ -16,7 +20,7 @@ export class Shape {
       }
 
       toSVGString() {
-            throw new Error('NOT IMEPLEMENTED toSVGSTRING');
+            return "id='"+ this.index + "'";
       }
 }
   
@@ -74,6 +78,26 @@ export class Rect extends Shape {
       }
 }
 
+$("svg").on({
+      "mousedown": function(event) {
+            let coord = Draw.toSVGCoordinates(event, svg);
+            Selector.shape = $(this);
+            Selector.clickX = coord[0] - Selector.shape.attr('x');
+            Selector.clickY = coord[1] - Selector.shape.attr('y');
+      },
+
+      "mousemove": function(event) {
+            if(Selector.shape) {
+                  let coord = Draw.toSVGCoordinates(event, svg);
+                  Selector.shape.attr({x: (coord[0] - Selector.clickX), 
+                                    y: (coord[1] - Selector.clickY)})
+            }
+      },
+      "mouseup": function(event) {
+            Selector.shape = null;
+      }
+}, 'rect');
+
 export class Circle extends Shape {
       constructor() {
             super();
@@ -96,6 +120,26 @@ export class Circle extends Shape {
                   }
 
 }
+
+$("svg").on({
+      "mousedown": function(event) {
+            let coord = Draw.toSVGCoordinates(event, svg);
+            Selector.shape = $(this);
+            Selector.clickX = coord[0] - Selector.shape.attr('cx');
+            Selector.clickY = coord[1] - Selector.shape.attr('cy');
+      },
+
+      "mousemove": function(event) {
+            if(Selector.shape) {
+                  let coord = Draw.toSVGCoordinates(event, svg);
+                  Selector.shape.attr({cx: (coord[0] - Selector.clickX), 
+                                    cy: (coord[1] - Selector.clickY)})
+            }
+      },
+      "mouseup": function(event) {
+            Selector.shape = null;
+      }
+}, 'circle');
 
 export class Line extends Shape {
       constructor() {
@@ -123,6 +167,32 @@ export class Line extends Shape {
             }
 }
 
+$("svg").on({
+      "mousedown": function(event) {
+            let coord = Draw.toSVGCoordinates(event, svg);
+            Selector.shape = $(this);
+            Selector.clickX = coord[0] - Selector.shape.attr('x1');
+            Selector.clickY = coord[1] - Selector.shape.attr('y1');
+      },
+
+      "mousemove": function(event) {
+            if(Selector.shape) {
+                  let coord = Draw.toSVGCoordinates(event, svg);
+                  let diffX = Selector.shape.attr('x2') - Selector.shape.attr('x1');
+                  let diffY = Selector.shape.attr('y2') - Selector.shape.attr('y1');
+
+                  Selector.shape.attr({
+                                    x1: (coord[0]) - Selector.clickX, 
+                                    y1: (coord[1]) - Selector.clickY,
+                                    x2: (coord[0] + diffX - Selector.clickX), 
+                                    y2: (coord[1] + diffY - Selector.clickY) })
+            }
+      },
+      "mouseup": function(event) {
+            Selector.shape = null;
+      }
+}, 'line');
+
 export class Polygon extends Shape {
       constructor() {
             super();
@@ -136,8 +206,9 @@ export class Polygon extends Shape {
 
       toSVGString() {
             let strPoints = "";
+
             this.points.forEach(point => {
-                  strPoints = strPoints + point[0] + "," + point[1] + " ";
+                 strPoints = strPoints + point[0] + "," + point[1] + " ";
             });
 
             return "  <polygon points='" + strPoints + 
@@ -146,6 +217,35 @@ export class Polygon extends Shape {
                         "; stroke-width:" + this.strokeWidth + "' />";
       }
 }
+
+$("svg").on({
+      "mousedown": function(event) {
+            let coord = Draw.toSVGCoordinates(event, svg);
+            Selector.shape = $(this);
+            Selector.points = Selector.shape.attr('points').split(' ')
+            Selector.points.pop();
+            Selector.clickX = coord[0];
+            Selector.clickY = coord[1];
+      },
+
+      "mousemove": function(event) {
+            if(Selector.shape) {
+                  let coord = Draw.toSVGCoordinates(event, svg);
+                  let pointsStr = "";
+
+                  Selector.points.forEach(function(pointC) {
+                        let point = pointC.split(',');
+                        pointsStr = pointsStr + 
+                              (parseInt(point[0]) + coord[0] - Selector.clickX) + "," + 
+                              (parseInt(point[1]) + coord[1] - Selector.clickY) + " ";
+                  });
+                  Selector.shape.attr({ points:pointsStr });
+            }
+      },
+      "mouseup": function(event) {
+            Selector.shape = null;
+      }
+}, 'polygon, polyline');
 
 // PolyLine class is almost extact copy of Polygon
 // Only diff is <polygon> vs <polyline>
@@ -218,6 +318,43 @@ export class Path extends Shape {
       }
 }
 
+// Points aren't seperated by commas
+$("svg").on({
+      "mousedown": function(event) {
+            let coord = Draw.toSVGCoordinates(event, svg);
+            Selector.shape = $(this);
+            Selector.points = Selector.shape.attr('d').split(' ')
+            Selector.points = Selector.points.filter(word => !/[A-Z]/.test(word));
+            console.log(Selector.points);
+            Selector.clickX = coord[0];
+            Selector.clickY = coord[1];
+      },
+
+      "mousemove": function(event) {
+            if(Selector.shape) {
+                  let coord = Draw.toSVGCoordinates(event, svg);
+                  let dStr = "M " + (parseInt(Selector.points[0]) + coord[0] - Selector.clickX) + " "
+                                    + (parseInt(Selector.points[1]) + coord[1] - Selector.clickY) + " Q ";
+
+                  for(let i=2; i < Selector.points.length - 1; i+=4) {
+                        dStr = dStr + (parseInt(Selector.points[i]) + coord[0] - Selector.clickX) + " "
+                                    + (parseInt(Selector.points[i + 1]) + coord[1] - Selector.clickY) + " "
+                                    + (parseInt(Selector.points[i + 2]) + coord[0] - Selector.clickX) + " "
+                                    + (parseInt(Selector.points[i + 3]) + coord[1] - Selector.clickY) 
+                        if(i != Selector.points.length - 4 ) {
+                              dStr = dStr + " Q "
+                        }
+                        console.log(dStr)
+                  }
+
+                  Selector.shape.attr({ d:dStr });
+            }
+      },
+      "mouseup": function(event) {
+            Selector.shape = null;
+      }
+}, 'path');
+
 export class MyText extends Shape {
       constructor() {
             super();
@@ -235,3 +372,23 @@ export class MyText extends Shape {
                          "' font-size='"+ this.strokeWidth +"'>"+ $("#textString").val() + "</text>";
       }
 }
+
+$("svg").on({
+      "mousedown": function(event) {
+            let coord = Draw.toSVGCoordinates(event, svg);
+            Selector.shape = $(this);
+            Selector.clickX = coord[0] - Selector.shape.attr('x');
+            Selector.clickY = coord[1] - Selector.shape.attr('y');
+      },
+
+      "mousemove": function(event) {
+            if(Selector.shape) {
+                  let coord = Draw.toSVGCoordinates(event, svg);
+                  Selector.shape.attr({x: (coord[0] - Selector.clickX), 
+                                    y: (coord[1] - Selector.clickY)})
+            }
+      },
+      "mouseup": function(event) {
+            Selector.shape = null;
+      }
+}, 'text');
