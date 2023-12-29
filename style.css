@@ -6,10 +6,28 @@ body{
     -ms-user-select: none;
 }
 
-h1 {
+.title {
     text-align: center;
-    font-size: 30px;
-    color: red;
+    font-size: 80px;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+
+.title span::after {
+    color: hsl(0, 100%, 50%); 
+    -webkit-text-stroke: 1px rgb(58, 78, 79); 
+    transition: color 0.3s ease-in-out;
+    padding: 0px;
+    margin-right: 0px;
+    content: attr(chr); 
+}
+
+.title span:nth-child(2n)::after {
+color: hsl(127, 100%, 50%);
+}
+
+.title span:nth-child(3n)::after {
+color: hsl(237, 100%, 50%);
 }
 
 .ui-container {
