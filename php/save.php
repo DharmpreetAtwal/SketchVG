@@ -14,6 +14,7 @@
   if($result) {
     $num_rows = $result->num_rows;
   }
+  
 
   if($num_rows == 0) {
     $sql = "INSERT INTO saved (name, drawing) VALUES ('$name', '$drawing')";
