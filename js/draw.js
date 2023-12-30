@@ -164,15 +164,20 @@ $(function() {
       });
 
       $("#saveButton").on('click', function() {
+            let drawingName = prompt("Enter the name of your drawing:");
             $.ajax({
                   url: '../php/save.php', 
                   method: 'POST', 
                   data: {
-                        name: 'dharm', 
+                        name: drawingName, 
                         drawing: svg.innerHTML
                   }, 
                   success: function(response) {
-                        console.log(response);
+                        if(response.status == "success") {
+                              console.log(response);
+                        } else if(response.status == "errorname") {
+                              console.log("Name taken");
+                        }
                   }, 
                   error: function(xhr, status, error) {
                         console.log(xhr.responseText);
