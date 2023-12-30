@@ -163,6 +163,25 @@ $(function() {
             Draw.currShape = new Shape.Line();
       });
 
+      $("#saveButton").on('click', function() {
+            $.ajax({
+                  url: '../php/save.php', 
+                  method: 'POST', 
+                  data: {
+                        name: 'dharm', 
+                        drawing: svg.innerHTML
+                  }, 
+                  success: function(response) {
+                        console.log(response);
+                  }, 
+                  error: function(xhr, status, error) {
+                        console.log(xhr.responseText);
+                        console.log(status);
+                        console.log(error)
+                  }
+            });       
+      });
+
       $("#fillPicker").on("change", function() {
             $(".customize").css('color', $(this).val());
       });
