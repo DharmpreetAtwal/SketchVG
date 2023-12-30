@@ -187,6 +187,27 @@ $(function() {
             });       
       });
 
+      $("#downloadButton").on('click', function() {
+            let drawingName = prompt("Enter the name of your drawing:");
+            $.ajax({
+                  url: '../php/load.php', 
+                  method: 'POST', 
+                  data: {
+                        name: drawingName, 
+                  }, 
+                  success: function(response) {
+                        if(response.status == "success") {
+                              svg.innerHTML = response.value;
+                        } 
+                  }, 
+                  error: function(xhr, status, error) {
+                        console.log(xhr.responseText);
+                        console.log(status);
+                        console.log(error)
+                  }
+            });  
+      });
+
       $("#fillPicker").on("change", function() {
             $(".customize").css('color', $(this).val());
       });
