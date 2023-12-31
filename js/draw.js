@@ -32,7 +32,7 @@ export class Draw {
             let canvasX = (clientX - canvasRect.left) * scaleX  + viewBox.x;
             let canvasY = (clientY - canvasRect.top) * scaleY + viewBox.y;
 
-            return [canvasX, canvasY];
+            return [Math.round(canvasX), Math.round(canvasY)];
       };
 }
 
