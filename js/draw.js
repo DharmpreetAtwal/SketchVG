@@ -41,10 +41,14 @@ function inBounds() {
       return (Draw.startX - viewBox.x  > 0 && Draw.startY - viewBox.y > 0)
 }
 
-function displayDrawing() {
+function displayDrawing(event) {
       if(!(Draw.currShape instanceof Selector)) {
             Draw.currShape.drawShape();
             svg.innerHTML = Draw.savedSVG + Draw.currShape.toSVGString();
+      } else {
+            if(Selector.shape) {
+                  Selector.move(event);
+            }
       }
 }
 
@@ -58,7 +62,7 @@ $(function() {
             Draw.endY = Math.round(coord[1]);
 
             if( (Draw.currShape instanceof Shape.Path) && inBounds()) {
-                  displayDrawing()
+                  displayDrawing(event)
             } 
       });
 
@@ -68,15 +72,16 @@ $(function() {
                   Draw.endX = Math.round(coord[0])
                   Draw.endY = Math.round(coord[1])
                   if(!(Draw.currShape instanceof Shape.Polygon)) {
-                        displayDrawing()
+                        displayDrawing(event)
                   } 
             }
       });
 
       $(document).on('mouseup', function(event) {
+            Selector.shape = null;
             if(inBounds()) {
                   Draw.dragging = false;
-                  displayDrawing()
+                  displayDrawing(event)
                   if(!(Draw.currShape instanceof Shape.Polygon 
                         || Draw.currShape instanceof Shape.Path)) {
                         Draw.savedSVG = svg.innerHTML;
