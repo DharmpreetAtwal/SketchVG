@@ -36,7 +36,6 @@ export class Draw {
       };
 }
 
-
 function inBounds() {
       let viewBox = svg.viewBox.baseVal;
       return (Draw.startX - viewBox.x  > 0 && Draw.startY - viewBox.y > 0)
@@ -166,6 +165,33 @@ $(function() {
       $("#saveButton").on('click', function() {
             let drawingName = prompt("Enter the name of your drawing:");
             $.ajax({
+                  url: '../php/verify.php', 
+                  method: 'POST', 
+                  data: {
+                        name: drawingName, 
+                  }, 
+                  success: function(response) {
+                        if(response.status == "success") {
+                              save(drawingName);
+                        } else if(response.status == "overwrite") {
+                              let userInput = window.prompt("There exists another file with the same name. Overwrite?:");
+                              console.log(userInput)
+                              if(userInput !== null) {
+                                    save(drawingName);
+                              } 
+                        } 
+                  }, 
+                  error: function(xhr, status, error) {
+                        console.log(xhr.responseText);
+                        console.log(status);
+                        console.log(error)
+                  }
+            });    
+      });
+
+      function save(drawingName) {
+            console.log("SAVING")
+            $.ajax({
                   url: '../php/save.php', 
                   method: 'POST', 
                   data: {
@@ -184,8 +210,8 @@ $(function() {
                         console.log(status);
                         console.log(error)
                   }
-            });       
-      });
+            });
+      }
 
       $("#downloadButton").on('click', function() {
             let drawingName = prompt("Enter the name of your drawing:");

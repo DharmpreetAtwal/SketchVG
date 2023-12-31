@@ -14,19 +14,19 @@
   if($result) {
     $num_rows = $result->num_rows;
   }
-  
-  
-  if($num_rows == 0) {
-    $sql = "INSERT INTO saved (name, drawing) VALUES ('$name', '$drawing')";
-    if($db->query($sql) == TRUE) {
-      $response = array("status" => "success", "message" => "Saved successful");
-    } else {
-      $response = array("status" => "errorsave", "code" => 1, "message" => "Save failed");
-    }
-  } else {
-    $response = array("status" => "errorname", "code" => 2, "message" => "Name exists");
+
+  if($num_rows == 1) {
+    $sql = "DELETE FROM saved WHERE name='$name';";
+    $db->query($sql);
   }
 
+  $sql = "INSERT INTO saved (name, drawing) VALUES ('$name', '$drawing')";
+  if($db->query($sql) == TRUE) {
+    $response = array("status" => "success", "message" => "Saved successful");
+  } else {
+    $response = array("status" => "errorsave", "code" => 1, "message" => "Save failed");
+  }
+  
   header('Content-Type: application/json');
   echo json_encode($response);
 ?>
